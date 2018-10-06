@@ -1,0 +1,1 @@
+"This is an android application which display to it users the baking recipes, steps and description how to get them done. This project is part of the requirement necessary for completion of  the Android Developer Nanodegree at Udacity" 
