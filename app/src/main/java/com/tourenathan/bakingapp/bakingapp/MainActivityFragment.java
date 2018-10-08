@@ -4,12 +4,15 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.Gson;
+import com.tourenathan.bakingapp.bakingapp.adapter.RecipeAdapter;
 import com.tourenathan.bakingapp.bakingapp.model.Recipe;
 import com.tourenathan.bakingapp.bakingapp.rest.BakingApiClient;
 import com.tourenathan.bakingapp.bakingapp.rest.BakingService;
@@ -27,6 +30,11 @@ public class MainActivityFragment extends Fragment {
 
     public static final String TAG = MainActivityFragment.class.getSimpleName();
 
+    List<Recipe> mRecipe;
+    RecyclerView mRecyclerView;
+    LinearLayoutManager mLinearlayoutManager;
+    RecipeAdapter mAdapter;
+
     public MainActivityFragment() {
     }
 
@@ -34,7 +42,13 @@ public class MainActivityFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         getRecipeOnline();
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        mRecyclerView = rootView.findViewById(R.id.recipe_recyclerview);
+        mAdapter = new RecipeAdapter();
+        mLinearlayoutManager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(mLinearlayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
+        return rootView;
     }
 
     /**
@@ -47,9 +61,10 @@ public class MainActivityFragment extends Fragment {
         recipeList.enqueue(new Callback<List<Recipe>>() {
             @Override
             public void onResponse(@NonNull Call<List<Recipe>> call, @NonNull Response<List<Recipe>> response) {
-                List<Recipe> recipe = response.body();
+                mRecipe = response.body();
+                mAdapter.setData(mRecipe);
                 Gson gson = new Gson();
-                String data = gson.toJson(recipe);
+                String data = gson.toJson(mRecipe);
                 Log.d(TAG, data);
             }
 
