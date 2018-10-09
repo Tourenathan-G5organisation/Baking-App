@@ -1,5 +1,6 @@
 package com.tourenathan.bakingapp.bakingapp;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -26,7 +27,7 @@ import retrofit2.Response;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment {
+public class MainActivityFragment extends Fragment implements ItemOnClickHandler {
 
     public static final String TAG = MainActivityFragment.class.getSimpleName();
 
@@ -44,7 +45,7 @@ public class MainActivityFragment extends Fragment {
         getRecipeOnline();
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         mRecyclerView = rootView.findViewById(R.id.recipe_recyclerview);
-        mAdapter = new RecipeAdapter();
+        mAdapter = new RecipeAdapter(this);
         mLinearlayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLinearlayoutManager);
         mRecyclerView.setAdapter(mAdapter);
@@ -73,5 +74,13 @@ public class MainActivityFragment extends Fragment {
                 t.printStackTrace();
             }
         });
+    }
+
+    @Override
+    public void onClick(Recipe recipe) {
+        Intent intent = new Intent(getContext(), RecipeIngredientDescriptionActivity.class);
+        Gson gson = new Gson();
+        intent.putExtra(Intent.EXTRA_TEXT, gson.toJson(recipe));
+        startActivity(intent);
     }
 }

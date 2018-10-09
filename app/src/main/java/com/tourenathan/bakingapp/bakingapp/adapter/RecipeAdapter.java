@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.tourenathan.bakingapp.bakingapp.ItemOnClickHandler;
 import com.tourenathan.bakingapp.bakingapp.R;
 import com.tourenathan.bakingapp.bakingapp.model.Recipe;
 
@@ -18,6 +20,11 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
     public final String TAG = RecipeAdapter.class.getSimpleName();
 
     private List<Recipe> mRecipeList;
+    private final ItemOnClickHandler mClickHandler;
+
+    public RecipeAdapter(ItemOnClickHandler itemOnClickHandler) {
+        mClickHandler = itemOnClickHandler;
+    }
 
     @NonNull
     @Override
@@ -47,13 +54,20 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView recipeName;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             recipeName = itemView.findViewById(R.id.recipe_name);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+            mClickHandler.onClick(mRecipeList.get(position));
         }
     }
 }
