@@ -33,7 +33,7 @@ public class MainActivityFragment extends Fragment implements ItemOnClickHandler
 
     List<Recipe> mRecipe;
     RecyclerView mRecyclerView;
-    LinearLayoutManager mLinearlayoutManager;
+    //LinearLayoutManager mLinearlayoutManager;
     RecipeAdapter mAdapter;
 
     public MainActivityFragment() {
@@ -46,8 +46,8 @@ public class MainActivityFragment extends Fragment implements ItemOnClickHandler
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         mRecyclerView = rootView.findViewById(R.id.recipe_recyclerview);
         mAdapter = new RecipeAdapter(this);
-        mLinearlayoutManager = new LinearLayoutManager(getContext());
-        mRecyclerView.setLayoutManager(mLinearlayoutManager);
+        //mLinearlayoutManager = new LinearLayoutManager(getContext());
+        //mRecyclerView.setLayoutManager(mLinearlayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         return rootView;
     }
