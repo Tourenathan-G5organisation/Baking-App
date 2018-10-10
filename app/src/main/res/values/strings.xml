@@ -2,6 +2,8 @@
     <string name="app_name">Baking App</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_recipe_description">RecipeDescription</string>
-    <string name="title_activity_recipe_ingredient_description">Description</string>
+    <string name="title_activity_recipe_ingredient_description">description</string>
     <string name="recipe_ingredients">Recipe Ingredients</string>
+    <string name="title_activity_recipe_ingredient">RecipeIngredientActivity</string>
+    <string name="ingredient">Ingredient</string>
 </resources>

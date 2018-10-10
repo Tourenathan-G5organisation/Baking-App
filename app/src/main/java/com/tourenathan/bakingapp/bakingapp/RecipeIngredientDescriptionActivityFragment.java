@@ -11,18 +11,22 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.Gson;
-import com.tourenathan.bakingapp.bakingapp.adapter.RecipientIngredientDescriptionAdapter;
+import com.tourenathan.bakingapp.bakingapp.adapter.RecipeIngredientDescriptionAdapter;
 import com.tourenathan.bakingapp.bakingapp.model.Recipe;
+
+import static com.tourenathan.bakingapp.bakingapp.adapter.RecipeIngredientDescriptionAdapter.RECIPE_DESCRIPTION_TYPE;
+import static com.tourenathan.bakingapp.bakingapp.adapter.RecipeIngredientDescriptionAdapter.RECIPE_INGREDIENT_TYPE;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class RecipeIngredientDescriptionActivityFragment extends Fragment {
+public class RecipeIngredientDescriptionActivityFragment extends Fragment implements OnDescriptionIngredientItemClickHandler {
 
     final static String TAG = RecipeIngredientDescriptionActivityFragment.class.getSimpleName();
 
-    RecipientIngredientDescriptionAdapter mRecipientIngredientDescriptionAdapter;
+    RecipeIngredientDescriptionAdapter mRecipeIngredientDescriptionAdapter;
     RecyclerView mRecipeDescriptionRecyclerview;
+    Recipe recipe;
 
     public RecipeIngredientDescriptionActivityFragment() {
     }
@@ -34,14 +38,30 @@ public class RecipeIngredientDescriptionActivityFragment extends Fragment {
         if (getActivity().getIntent()!=null && getActivity().getIntent().hasExtra(Intent.EXTRA_TEXT)) {
             Log.d(TAG,getActivity().getIntent().getStringExtra(Intent.EXTRA_TEXT));
             Gson gson = new Gson();
-            Recipe recipe = gson.fromJson(getActivity().getIntent().getStringExtra(Intent.EXTRA_TEXT), Recipe.class);
-            mRecipientIngredientDescriptionAdapter = new RecipientIngredientDescriptionAdapter();
+            recipe = gson.fromJson(getActivity().getIntent().getStringExtra(Intent.EXTRA_TEXT), Recipe.class);
+            mRecipeIngredientDescriptionAdapter = new RecipeIngredientDescriptionAdapter(this);
             mRecipeDescriptionRecyclerview = rootView.findViewById(R.id.recipe_description_ingredient_recyclerview);
-            mRecipientIngredientDescriptionAdapter.setData(recipe);
-            mRecipeDescriptionRecyclerview.setAdapter(mRecipientIngredientDescriptionAdapter);
+            mRecipeIngredientDescriptionAdapter.setData(recipe);
+            mRecipeDescriptionRecyclerview.setAdapter(mRecipeIngredientDescriptionAdapter);
+            getActivity().setTitle(String.format("%s %s", recipe.getName(), getString(R.string.title_activity_recipe_ingredient_description)));
         } else {
             getActivity().finish();
         }
         return rootView;
+    }
+
+    @Override
+    public void onClick(String jsonData, int itemType) {
+        if (itemType == RECIPE_INGREDIENT_TYPE){
+            Intent intent = new Intent(getActivity(), RecipeIngredientActivity.class);
+            intent.putExtra(Intent.EXTRA_TEXT, jsonData);
+            intent.putExtra("name", recipe.getName());
+            startActivity(intent);
+        }
+        else if (itemType == RECIPE_DESCRIPTION_TYPE){
+            /*Intent intent = new Intent(getActivity(),);
+            intent.putExtra(Intent.EXTRA_TEXT, jsonData);
+            startActivity(intent);*/
+        }
     }
 }

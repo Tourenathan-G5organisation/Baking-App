@@ -30,6 +30,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.tourenathan.bakingapp.bakingapp.MainActivity" />
         </activity>
+        <activity
+            android:name=".RecipeIngredientActivity"
+            android:label="@string/title_activity_recipe_ingredient"
+            android:parentActivityName=".RecipeIngredientDescriptionActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.tourenathan.bakingapp.bakingapp.RecipeIngredientDescriptionActivity" />
+        </activity>
     </application>
 
 </manifest>
