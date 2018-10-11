@@ -59,9 +59,10 @@ public class RecipeIngredientDescriptionActivityFragment extends Fragment implem
             startActivity(intent);
         }
         else if (itemType == RECIPE_DESCRIPTION_TYPE){
-            /*Intent intent = new Intent(getActivity(),);
+            Intent intent = new Intent(getActivity(), RecipeStepActivity.class);
             intent.putExtra(Intent.EXTRA_TEXT, jsonData);
-            startActivity(intent);*/
+            intent.putExtra("name", recipe.getName());
+            startActivity(intent);
         }
     }
 }

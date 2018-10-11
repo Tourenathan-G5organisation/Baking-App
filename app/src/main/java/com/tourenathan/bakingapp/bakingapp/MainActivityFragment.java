@@ -13,11 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.tourenathan.bakingapp.bakingapp.adapter.RecipeAdapter;
+import com.tourenathan.bakingapp.bakingapp.model.Ingredient;
 import com.tourenathan.bakingapp.bakingapp.model.Recipe;
 import com.tourenathan.bakingapp.bakingapp.rest.BakingApiClient;
 import com.tourenathan.bakingapp.bakingapp.rest.BakingService;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 import retrofit2.Call;
@@ -35,6 +38,7 @@ public class MainActivityFragment extends Fragment implements ItemOnClickHandler
     RecyclerView mRecyclerView;
     //LinearLayoutManager mLinearlayoutManager;
     RecipeAdapter mAdapter;
+    Gson gson;
 
     public MainActivityFragment() {
     }
@@ -42,10 +46,18 @@ public class MainActivityFragment extends Fragment implements ItemOnClickHandler
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        getRecipeOnline();
+        gson = new Gson();
+        if (savedInstanceState != null) {
+            Type type = new TypeToken<List<Recipe>>() { }.getType();
+            mRecipe = gson.fromJson(savedInstanceState.getString(Intent.EXTRA_TEXT), type);
+        } else {
+            getRecipeOnline();
+        }
+
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         mRecyclerView = rootView.findViewById(R.id.recipe_recyclerview);
         mAdapter = new RecipeAdapter(this);
+        mAdapter.setData(mRecipe);
         //mLinearlayoutManager = new LinearLayoutManager(getContext());
         //mRecyclerView.setLayoutManager(mLinearlayoutManager);
         mRecyclerView.setAdapter(mAdapter);
@@ -82,5 +94,11 @@ public class MainActivityFragment extends Fragment implements ItemOnClickHandler
         Gson gson = new Gson();
         intent.putExtra(Intent.EXTRA_TEXT, gson.toJson(recipe));
         startActivity(intent);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putString(Intent.EXTRA_TEXT, gson.toJson(mRecipe));
+        super.onSaveInstanceState(outState);
     }
 }
