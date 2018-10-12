@@ -9,4 +9,6 @@
     <string name="title_activity_recipe_step">RecipeStepActivity</string>
 
     <string name="step">steps</string>
+    <string name="next_step">Next Step</string>
+    <string name="prev_step">Prev Step</string>
 </resources>

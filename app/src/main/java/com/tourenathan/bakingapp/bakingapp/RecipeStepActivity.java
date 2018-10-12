@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -44,8 +45,32 @@ public class RecipeStepActivity extends AppCompatActivity {
                 mStep = gson.fromJson(getIntent().getStringExtra(Intent.EXTRA_TEXT), steplistType);
                 mFragment = (RecipeStepActivityFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentStep);
                 mFragment.setStep(mStep.get(mPosition));
+                mFragment.initialiseData();
             }
         }
+        Button next = findViewById(R.id.next_step_button);
+        Button prev = findViewById(R.id.prev_step_button);
+
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mPosition < mStep.size()-1) {
+                    mFragment.setStep(mStep.get(mPosition += 1));
+                    mFragment.initialiseData();
+                }
+            }
+        });
+
+        prev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mPosition > 0) {
+                    mFragment.setStep(mStep.get(mPosition -= 1));
+                    mFragment.initialiseData();
+                }
+            }
+
+        });
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
