@@ -72,7 +72,7 @@ public class RecipeIngredientDescriptionAdapter extends RecyclerView.Adapter<Rec
     /**
      * Set the recipe which data will be displayed
      *
-     * @param recipe
+     * @param recipe Recipe to info to display
      */
     public void setData(Recipe recipe) {
         this.recipe = recipe;
@@ -98,14 +98,14 @@ public class RecipeIngredientDescriptionAdapter extends RecyclerView.Adapter<Rec
             Gson gson = new Gson();
             int itemviewType = getItemViewType();
             if (getItemViewType() == RECIPE_INGREDIENT_TYPE){
-                mClickHandler.onClick(gson.toJson(recipe.getIngredients()),itemviewType);
+                mClickHandler.onClick(gson.toJson(recipe.getIngredients()), recipe.getName(), position, itemviewType);
             }
             else {
                 if (recipeIngredientList.size() == 0) {
-                    mClickHandler.onClick(gson.toJson(recipe.getSteps().get(position)), itemviewType);
+                    mClickHandler.onClick(gson.toJson(recipe.getSteps()), recipe.getName(), position, itemviewType);
                 }
                 else {
-                    mClickHandler.onClick(gson.toJson(recipe.getSteps().get(position-1)), itemviewType);
+                    mClickHandler.onClick(gson.toJson(recipe.getSteps()), recipe.getName(), position-1, itemviewType);
                 }
 
             }

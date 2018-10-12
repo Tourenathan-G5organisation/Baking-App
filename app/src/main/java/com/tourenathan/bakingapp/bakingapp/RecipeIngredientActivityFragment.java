@@ -2,10 +2,12 @@ package com.tourenathan.bakingapp.bakingapp;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -33,15 +35,14 @@ public class RecipeIngredientActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_recipe_ingredient, container, false);
         if (getActivity().getIntent() != null && getActivity().getIntent().hasExtra(Intent.EXTRA_TEXT)) {
-            Type ingredientType = new TypeToken<List<Ingredient>>() { }.getType();
+            Type ingredientType = new TypeToken<List<Ingredient>>() {
+            }.getType();
             Gson gson = new Gson();
             List<Ingredient> ingredientList = gson.fromJson(getActivity().getIntent().getStringExtra(Intent.EXTRA_TEXT), ingredientType);
             mIngredientAdapter = new RecipeIngredientAdapter();
             mIngredientAdapter.setData(ingredientList);
             mRecyclerview = rootView.findViewById(R.id.ingredient_recyclerview);
             mRecyclerview.setAdapter(mIngredientAdapter);
-
-            getActivity().setTitle(String.format("%s %s", getActivity().getIntent().getStringExtra("name"), getString(R.string.ingredient)));
 
         } else {
             getActivity().finish();
