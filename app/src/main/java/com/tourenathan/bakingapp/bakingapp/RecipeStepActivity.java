@@ -40,9 +40,9 @@ public class RecipeStepActivity extends AppCompatActivity {
             if (getIntent().hasExtra(Intent.EXTRA_TEXT)) {
                 Gson gson = new Gson();
                 mPosition = getIntent().getIntExtra(RECIPE_POSITION, 0);
-                Type steplistType = new TypeToken<List<Step>>() {
+                Type stepListType = new TypeToken<List<Step>>() {
                 }.getType();
-                mStep = gson.fromJson(getIntent().getStringExtra(Intent.EXTRA_TEXT), steplistType);
+                mStep = gson.fromJson(getIntent().getStringExtra(Intent.EXTRA_TEXT), stepListType);
                 mFragment = (RecipeStepActivityFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentStep);
                 mFragment.setStep(mStep.get(mPosition));
                 mFragment.initialiseData();
@@ -57,6 +57,8 @@ public class RecipeStepActivity extends AppCompatActivity {
                 if (mPosition < mStep.size()-1) {
                     mFragment.setStep(mStep.get(mPosition += 1));
                     mFragment.initialiseData();
+                    mFragment.releasePlayer();
+                    mFragment.initPlayer();
                 }
             }
         });
@@ -67,6 +69,8 @@ public class RecipeStepActivity extends AppCompatActivity {
                 if (mPosition > 0) {
                     mFragment.setStep(mStep.get(mPosition -= 1));
                     mFragment.initialiseData();
+                    mFragment.releasePlayer();
+                    mFragment.initPlayer();
                 }
             }
 
