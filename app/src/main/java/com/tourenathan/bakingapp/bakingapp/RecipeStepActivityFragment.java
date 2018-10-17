@@ -2,8 +2,10 @@ package com.tourenathan.bakingapp.bakingapp;
 
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,16 +13,23 @@ import android.widget.TextView;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
+import com.google.android.exoplayer2.PlaybackParameters;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.source.dash.DashMediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
@@ -31,7 +40,7 @@ import com.tourenathan.bakingapp.bakingapp.model.Step;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class RecipeStepActivityFragment extends Fragment {
+public class RecipeStepActivityFragment extends Fragment implements Player.EventListener {
 
     public static final String TAG = RecipeStepActivityFragment.class.getSimpleName();
 
@@ -40,6 +49,7 @@ public class RecipeStepActivityFragment extends Fragment {
     PlayerView mPlayerView;
     SimpleExoPlayer mEXoplayer;
     long contentPosition;
+    boolean isLanscape;
 
     public RecipeStepActivityFragment() {
     }
@@ -51,8 +61,15 @@ public class RecipeStepActivityFragment extends Fragment {
 
         mDescription = rootView.findViewById(R.id.step_description_Textview);
         mPlayerView = rootView.findViewById(R.id.playerView);
-        contentPosition = 0;
+        if (savedInstanceState != null){
+            contentPosition = savedInstanceState.getLong("position");
+        }
+        else {
+            contentPosition = 0;
+        }
+
         return rootView;
+
     }
 
     /**
@@ -66,7 +83,7 @@ public class RecipeStepActivityFragment extends Fragment {
     }
 
     public void initialiseData() {
-        if (mStep != null) {
+        if (mStep != null && mDescription != null) {
             mDescription.setText(mStep.getDescription());
         }
     }
@@ -118,5 +135,65 @@ public class RecipeStepActivityFragment extends Fragment {
     public void onResume() {
         super.onResume();
         initPlayer();
+    }
+
+    @Override
+    public void onTimelineChanged(Timeline timeline, @Nullable Object manifest, int reason) {
+
+    }
+
+    @Override
+    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+
+    }
+
+    @Override
+    public void onLoadingChanged(boolean isLoading) {
+
+    }
+
+    @Override
+    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+        if (playWhenReady && playbackState == Player.STATE_READY) {
+            Log.d(TAG, "Player is plaing");
+        } else if (playbackState == Player.STATE_READY) {
+            Log.d(TAG, "Player is paused");
+        }
+    }
+
+    @Override
+    public void onRepeatModeChanged(int repeatMode) {
+
+    }
+
+    @Override
+    public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+
+    }
+
+    @Override
+    public void onPlayerError(ExoPlaybackException error) {
+
+    }
+
+    @Override
+    public void onPositionDiscontinuity(int reason) {
+
+    }
+
+    @Override
+    public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+
+    }
+
+    @Override
+    public void onSeekProcessed() {
+
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putLong("position", contentPosition);
+        super.onSaveInstanceState(outState);
     }
 }
