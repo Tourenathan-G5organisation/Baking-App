@@ -1,6 +1,7 @@
 package com.tourenathan.bakingapp.bakingapp;
 
 import android.net.Uri;
+import android.support.annotation.LongDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -43,6 +44,7 @@ import com.tourenathan.bakingapp.bakingapp.model.Step;
 public class RecipeStepActivityFragment extends Fragment implements Player.EventListener {
 
     public static final String TAG = RecipeStepActivityFragment.class.getSimpleName();
+    final String CONTENT_POSITION = "content_position";
 
     Step mStep;
     TextView mDescription;
@@ -61,10 +63,9 @@ public class RecipeStepActivityFragment extends Fragment implements Player.Event
 
         mDescription = rootView.findViewById(R.id.step_description_Textview);
         mPlayerView = rootView.findViewById(R.id.playerView);
-        if (savedInstanceState != null){
-            contentPosition = savedInstanceState.getLong("position");
-        }
-        else {
+        if (savedInstanceState != null) {
+            contentPosition = savedInstanceState.getLong(CONTENT_POSITION);
+        } else {
             contentPosition = 0;
         }
 
@@ -89,7 +90,8 @@ public class RecipeStepActivityFragment extends Fragment implements Player.Event
     }
 
     public void initPlayer() {
-        if (mEXoplayer == null) {
+        if (mEXoplayer == null && !(mStep.getVideoURL().isEmpty())) {
+            mPlayerView.setVisibility(View.VISIBLE);
             // Create an instance of exoPlayer
             TrackSelector trackSelector = new DefaultTrackSelector();
             LoadControl loadControl = new DefaultLoadControl();
@@ -105,7 +107,11 @@ public class RecipeStepActivityFragment extends Fragment implements Player.Event
             mEXoplayer.prepare(mediaSource);
             mEXoplayer.setPlayWhenReady(true);
 
+        } else {
+            // hide the video view
+            mPlayerView.setVisibility(View.GONE);
         }
+        Log.d(TAG, "content:" + mStep.getVideoURL());
 
     }
 
@@ -127,7 +133,8 @@ public class RecipeStepActivityFragment extends Fragment implements Player.Event
     @Override
     public void onPause() {
         super.onPause();
-        contentPosition = mEXoplayer.getContentPosition();
+        if (mEXoplayer != null)
+            contentPosition = mEXoplayer.getContentPosition();
         releasePlayer();
     }
 
@@ -193,7 +200,7 @@ public class RecipeStepActivityFragment extends Fragment implements Player.Event
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putLong("position", contentPosition);
+        outState.putLong(CONTENT_POSITION, contentPosition);
         super.onSaveInstanceState(outState);
     }
 }

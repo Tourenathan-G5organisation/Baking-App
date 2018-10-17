@@ -35,7 +35,7 @@ public class RecipeStepActivity extends AppCompatActivity {
 
     List<Step> mStep;
     RecipeStepActivityFragment mFragment;
-    int mPosition;
+    int mPosition = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,12 +52,16 @@ public class RecipeStepActivity extends AppCompatActivity {
             hideSystemUI();
 
         }
+        if (savedInstanceState != null) {
+            mPosition = savedInstanceState.getInt(RECIPE_POSITION);
+        }
 
         if (getIntent() != null && getIntent().hasExtra(RECIPE_NAME)) {
             setTitle(String.format("%s %s", getIntent().getStringExtra(RECIPE_NAME), getString(R.string.step)));
             if (getIntent().hasExtra(Intent.EXTRA_TEXT)) {
                 Gson gson = new Gson();
-                mPosition = getIntent().getIntExtra(RECIPE_POSITION, 0);
+                if (mPosition == -1)
+                    mPosition = getIntent().getIntExtra(RECIPE_POSITION, 0);
                 Type stepListType = new TypeToken<List<Step>>() {
                 }.getType();
                 mStep = gson.fromJson(getIntent().getStringExtra(Intent.EXTRA_TEXT), stepListType);
@@ -139,4 +143,9 @@ public class RecipeStepActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(RECIPE_POSITION, mPosition);
+        super.onSaveInstanceState(outState);
+    }
 }
