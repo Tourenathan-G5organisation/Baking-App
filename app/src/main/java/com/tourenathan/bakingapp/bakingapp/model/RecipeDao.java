@@ -16,6 +16,9 @@ public interface RecipeDao {
     @Query("SELECT * FROM recipe")
     LiveData<List<Recipe>> getAllRecipe();
 
+    @Query("SELECT * FROM recipe")
+    List<Recipe> getAllRecipeData();
+
     @Query("SELECT * FROM recipe WHERE id = :id")
     LiveData<Recipe> getRecipeById(int id);
 
