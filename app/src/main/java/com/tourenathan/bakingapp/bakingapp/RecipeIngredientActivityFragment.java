@@ -26,6 +26,8 @@ public class RecipeIngredientActivityFragment extends Fragment {
 
     RecyclerView mRecyclerview;
     RecipeIngredientAdapter mIngredientAdapter;
+    List<Ingredient> mIngredientList;
+    Gson gson = new Gson();
 
     public RecipeIngredientActivityFragment() {
     }
@@ -34,21 +36,41 @@ public class RecipeIngredientActivityFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_recipe_ingredient, container, false);
-        if (getActivity().getIntent() != null && getActivity().getIntent().hasExtra(Intent.EXTRA_TEXT)) {
-            Type ingredientType = new TypeToken<List<Ingredient>>() {
-            }.getType();
-            Gson gson = new Gson();
-            List<Ingredient> ingredientList = gson.fromJson(getActivity().getIntent().getStringExtra(Intent.EXTRA_TEXT), ingredientType);
-            mIngredientAdapter = new RecipeIngredientAdapter();
-            mIngredientAdapter.setData(ingredientList);
-            mRecyclerview = rootView.findViewById(R.id.ingredient_recyclerview);
-            mRecyclerview.setAdapter(mIngredientAdapter);
+        Type ingredientType = new TypeToken<List<Ingredient>>() {
+        }.getType();
 
-        } else {
-            getActivity().finish();
+        if (savedInstanceState != null) {
+            mIngredientList = gson.fromJson(savedInstanceState.getString(Intent.EXTRA_TEXT), ingredientType);
+
+        } else if (getActivity().getIntent() != null &&
+                       (mIngredientList == null) &&
+                            getActivity().getIntent().hasExtra(Intent.EXTRA_TEXT)) {
+
+            mIngredientList = gson.fromJson(getActivity().getIntent().getStringExtra(Intent.EXTRA_TEXT), ingredientType);
+
+
         }
+        mIngredientAdapter = new RecipeIngredientAdapter();
+        mIngredientAdapter.setData(mIngredientList);
+        mRecyclerview = rootView.findViewById(R.id.ingredient_recyclerview);
+        mRecyclerview.setAdapter(mIngredientAdapter);/*else {
+            getActivity().finish();
+        }*/
 
         return rootView;
 
+    }
+
+    public void setData(String text) {
+        Type ingredientType = new TypeToken<List<Ingredient>>() {
+        }.getType();
+        gson = new Gson();
+        mIngredientList = gson.fromJson(text, ingredientType);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putString(Intent.EXTRA_TEXT, gson.toJson(mIngredientList));
+        super.onSaveInstanceState(outState);
     }
 }

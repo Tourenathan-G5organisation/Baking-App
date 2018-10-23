@@ -68,7 +68,7 @@ public class RecipeStepActivityFragment extends Fragment implements Player.Event
         } else {
             contentPosition = 0;
         }
-
+        initialiseData();
         return rootView;
 
     }
