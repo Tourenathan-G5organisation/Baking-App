@@ -51,4 +51,7 @@ dependencies {
      }
     implementation 'com.android.support:support-annotations:27.1.1'
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
+
+    implementation 'org.parceler:parceler-api:1.1.11'
+    annotationProcessor 'org.parceler:parceler:1.1.11'
 }

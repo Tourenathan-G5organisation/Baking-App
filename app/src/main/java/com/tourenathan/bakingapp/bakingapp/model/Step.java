@@ -1,5 +1,8 @@
 package com.tourenathan.bakingapp.bakingapp.model;
 
+import org.parceler.Parcel;
+
+@Parcel(Parcel.Serialization.BEAN)
 public class Step {
 
     private int id;

@@ -38,6 +38,8 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.tourenathan.bakingapp.bakingapp.model.Step;
 
+import org.parceler.Parcels;
+
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -65,6 +67,7 @@ public class RecipeStepActivityFragment extends Fragment implements Player.Event
         mPlayerView = rootView.findViewById(R.id.playerView);
         if (savedInstanceState != null) {
             contentPosition = savedInstanceState.getLong(CONTENT_POSITION);
+            mStep = Parcels.unwrap(savedInstanceState.getParcelable("step"));
         } else {
             contentPosition = 0;
         }
@@ -162,7 +165,7 @@ public class RecipeStepActivityFragment extends Fragment implements Player.Event
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
         if (playWhenReady && playbackState == Player.STATE_READY) {
-            Log.d(TAG, "Player is plaing");
+            Log.d(TAG, "Player is playing");
         } else if (playbackState == Player.STATE_READY) {
             Log.d(TAG, "Player is paused");
         }
@@ -201,6 +204,7 @@ public class RecipeStepActivityFragment extends Fragment implements Player.Event
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putLong(CONTENT_POSITION, contentPosition);
+        outState.putParcelable("step", Parcels.wrap(mStep));
         super.onSaveInstanceState(outState);
     }
 }
