@@ -103,8 +103,8 @@ public class RecipeStepActivityFragment extends Fragment implements Player.Event
             DataSource.Factory dataSourceFactory =
                     new DefaultDataSourceFactory(getContext(), userAgent);
             MediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(Uri.parse(mStep.getVideoURL()));
-            mEXoplayer.seekTo(contentPosition);
             mEXoplayer.prepare(mediaSource);
+            mEXoplayer.seekTo(contentPosition);
             mEXoplayer.setPlayWhenReady(true);
 
         } else {
